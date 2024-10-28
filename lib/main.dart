@@ -60,7 +60,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void updateSale(String noFaktur, Map<String, dynamic> updatedSale) {
     setState(() {
-      final index = salesData.indexWhere((sale) => sale['noFaktur'] == noFaktur);
+      final index =
+          salesData.indexWhere((sale) => sale['noFaktur'] == noFaktur);
       if (index != -1) {
         salesData[index] = updatedSale;
       }
@@ -94,7 +95,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => DashboardPage(salesData: salesData),
+                          builder: (context) =>
+                              DashboardPage(salesData: salesData),
                         ),
                       );
                     },
@@ -106,7 +108,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => AddPage(onAdd: addSale),
+                          builder: (context) =>
+                              AddPage(onAdd: addSale, salesData: salesData),
+                          //pass existing data to check
                         ),
                       );
                     },
@@ -155,8 +159,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-
-
 
 class HomeMenuItem extends StatelessWidget {
   final String title;

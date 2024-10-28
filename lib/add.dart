@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 class AddPage extends StatefulWidget {
   final Function(Map<String, dynamic>) onAdd;
+  final List<Map<String, dynamic>> salesData; // Add existing salesData
 
-  AddPage({required this.onAdd});
+  AddPage({required this.onAdd, required this.salesData});
 
   @override
   _AddPageState createState() => _AddPageState();
@@ -19,15 +20,37 @@ class _AddPageState extends State<AddPage> {
 
   void submit() {
     if (_formKey.currentState!.validate()) {
-      widget.onAdd({
-        'noFaktur': fakturController.text,
-        'tanggal': tanggalController.text,
-        'customer': customerController.text,
-        'jumlahBarang': int.parse(jumlahController.text),
-        'totalPenjualan': int.parse(totalController.text),
-      });
+      // Check if noFaktur already exists
+      final noFaktur = fakturController.text;
+      final exists = widget.salesData.any((sale) => sale['noFaktur'] == noFaktur);
 
-      Navigator.pop(context);
+      if (exists) {
+        // Show an error dialog if duplicate is found
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text('Error'),
+            content: Text('No Faktur sudah ada. Gunakan No Faktur yang berbeda.'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text('OK'),
+              ),
+            ],
+          ),
+        );
+      } else {
+        // Proceed to add the new sale if no duplicate
+        widget.onAdd({
+          'noFaktur': noFaktur,
+          'tanggal': tanggalController.text,
+          'customer': customerController.text,
+          'jumlahBarang': int.parse(jumlahController.text),
+          'totalPenjualan': int.parse(totalController.text),
+        });
+
+        Navigator.pop(context);
+      }
     }
   }
 
